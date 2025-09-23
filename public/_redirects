@@ -1,0 +1,9 @@
+# Netlify redirects file
+# Handle client-side routing
+/*    /index.html   200
+
+# Admin routes
+/admin/*  /index.html  200
+
+# API routes (if any)
+/api/*  /.netlify/functions/:splat  200
