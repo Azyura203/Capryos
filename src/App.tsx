@@ -26,24 +26,18 @@ function App() {
           <Route path="/admin/posts" element={<PostsList />} />
           <Route path="/admin/posts/new" element={<PostEditor />} />
           <Route path="/admin/posts/edit/:id" element={<PostEditor />} />
-          
-          {/* Public Routes */}
-          <Route
-            path="/*"
-            element={
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:slug" element={<BlogPost />} />
-                  <Route path="/newsletter" element={<Newsletter />} />
-                  <Route path="/contact" element={<Contact />} />
-                </Routes>
-              </Layout>
-            }
-          />
+
+          {/* Public Routes wrapped in Layout */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/newsletter" element={<Newsletter />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
         </Routes>
+
         <Toaster
           position="top-right"
           toastOptions={{

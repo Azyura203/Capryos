@@ -376,3 +376,55 @@ As the technology matures and user experience improves, DeFi could become a sign
   ARRAY['defi', 'cryptocurrency', 'blockchain', 'finance'],
   10
 );
+insert into blog_posts (
+  title,
+  slug,
+  excerpt,
+  content,
+  author,
+  status,
+  created_at,
+  tags,
+  views
+) values (
+  'AI in 2025: How Artificial Intelligence is Reshaping Our World',
+  'ai-2025-reshaping-world',
+  'Explore the key trends in Artificial Intelligence for 2025 and how they are transforming industries, jobs, and everyday life.',
+  '# AI in 2025: How Artificial Intelligence is Reshaping Our World
+
+Artificial Intelligence (AI) has evolved from futuristic speculation into a central part of modern life. In 2025, AI continues to push boundaries across healthcare, finance, education, and even creative industries.  
+
+## Key Trends in AI
+
+### 1. Generative AI Everywhere
+Tools like ChatGPT, MidJourney, and Stable Diffusion have shown the world what is possible with generative AI. In 2025, these models are powering business productivity, content creation, and even software development.
+
+### 2. AI in Healthcare
+AI is helping doctors diagnose diseases faster, create personalized treatment plans, and accelerate drug discovery. Robotics combined with AI are even assisting in surgeries.
+
+### 3. Automation in the Workplace
+Routine jobs are increasingly automated, freeing humans for higher-level problem-solving while raising important questions about job displacement.
+
+### 4. AI Governance and Ethics
+With great power comes great responsibility. Governments and institutions are developing frameworks to regulate AI usage, focusing on fairness, transparency, and accountability.
+
+## Opportunities and Risks
+
+- **Opportunities**: Improved efficiency, better healthcare, new creative tools, smarter education.  
+- **Risks**: Bias in AI models, over-reliance on automation, privacy concerns, and potential misuse.  
+
+## The Future Outlook
+
+As AI becomes more accessible, it will empower individuals and small businesses just as much as large corporations. Education and awareness are critical to ensure society adapts positively to this transformation.
+
+---
+
+**Conclusion**  
+AI is no longer the future — it is the present. How we choose to use and regulate it will define the next decade of human progress.
+',
+  'Capryos Team',
+  'published',
+  now(),
+  ARRAY['AI', 'technology', 'future', 'automation'],
+  5
+);
