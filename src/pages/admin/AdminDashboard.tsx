@@ -236,6 +236,20 @@ const AdminDashboard: React.FC = () => {
             >
               View All
             </button>
+            <button
+              onClick={() => window.open('/admin/subscribers', '_blank')}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
+            >
+              <Users className="h-4 w-4" />
+              <span>Subscribers</span>
+            </button>
+            <button
+              onClick={() => window.open('/admin/suggestions', '_blank')}
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors duration-200 flex items-center space-x-2"
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span>Suggestions</span>
+            </button>
           </div>
           <div className="space-y-4">
             {recentSuggestions.map((suggestion) => (

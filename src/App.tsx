@@ -14,6 +14,8 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import PostEditor from './pages/admin/PostEditor';
 import PostsList from './pages/admin/PostsList';
+import SubscribersList from './pages/admin/SubscribersList';
+import ContentSuggestionsList from './pages/admin/ContentSuggestionsList';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="/admin/posts" element={<PostsList />} />
           <Route path="/admin/posts/new" element={<PostEditor />} />
           <Route path="/admin/posts/edit/:id" element={<PostEditor />} />
+          <Route path="/admin/subscribers" element={<SubscribersList />} />
+          <Route path="/admin/suggestions" element={<ContentSuggestionsList />} />
 
           {/* Public Routes wrapped in Layout */}
           <Route element={<Layout />}>
