@@ -128,6 +128,29 @@ CREATE POLICY "Authenticated users can read content suggestions"
   TO authenticated
   USING (true);
 
+create or replace function handle_new_user()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  insert into public.subscribers (email, name, status)
+  values (
+    new.email,
+    new.raw_user_meta_data->>'name', -- optional: only works if you pass name in signUp metadata
+    'active'::subscriber_status
+  )
+  on conflict (email) do nothing; -- avoid duplicates if they already exist
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row
+execute function handle_new_user();
+
+
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_blog_posts_status ON blog_posts(status);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_published_at ON blog_posts(published_at DESC);

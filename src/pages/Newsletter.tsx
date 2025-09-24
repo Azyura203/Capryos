@@ -14,35 +14,28 @@ const Newsletter: React.FC = () => {
     if (!email) return;
 
     setIsLoading(true);
-    
+
     try {
-      const { error } = await supabase
-        .from('subscribers')
-        .insert([
-          {
-            email: email.toLowerCase().trim(),
-            name: name.trim() || null,
-            status: 'active'
-          }
-        ]);
+      // Use Supabase Auth signUp → this triggers email confirmation
+      const { error } = await supabase.auth.signUp({
+        email: email.toLowerCase().trim(),
+        password: crypto.randomUUID(), // random password (they won’t log in)
+      });
 
       if (error) {
-        if (error.code === '23505') { // Unique constraint violation
+        if (error.message.includes('already registered')) {
           toast.error('This email is already subscribed!');
         } else {
           throw error;
         }
       } else {
         setIsSubmitted(true);
-        toast.success('Successfully subscribed to our newsletter!');
+        toast.success('Check your inbox to confirm your subscription!');
         setEmail('');
         setName('');
-        
-        // Reset success state after 5 seconds
-        setTimeout(() => setIsSubmitted(false), 5000);
       }
-    } catch (error) {
-      console.error('Newsletter signup error:', error);
+    } catch (err) {
+      console.error('Newsletter signup error:', err);
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
