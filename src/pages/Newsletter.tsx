@@ -1,21 +1,52 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle, ArrowRight } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import toast from 'react-hot-toast';
 
 const Newsletter: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email) return;
+
     setIsLoading(true);
     
-    // Simulate API call - replace with actual Mailchimp/Kit integration
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setIsSubmitted(true);
-    setIsLoading(false);
-    setEmail('');
+    try {
+      const { error } = await supabase
+        .from('subscribers')
+        .insert([
+          {
+            email: email.toLowerCase().trim(),
+            name: name.trim() || null,
+            status: 'active'
+          }
+        ]);
+
+      if (error) {
+        if (error.code === '23505') { // Unique constraint violation
+          toast.error('This email is already subscribed!');
+        } else {
+          throw error;
+        }
+      } else {
+        setIsSubmitted(true);
+        toast.success('Successfully subscribed to our newsletter!');
+        setEmail('');
+        setName('');
+        
+        // Reset success state after 5 seconds
+        setTimeout(() => setIsSubmitted(false), 5000);
+      }
+    } catch (error) {
+      console.error('Newsletter signup error:', error);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const benefits = [
@@ -69,6 +100,20 @@ const Newsletter: React.FC = () => {
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Name (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                    placeholder="Enter your name"
+                  />
+                </div>
+                
+                <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Email Address
                   </label>
@@ -103,8 +148,7 @@ const Newsletter: React.FC = () => {
               </form>
               
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-4">
-                By subscribing, you agree to receive marketing emails from Capryos. 
-                You can unsubscribe at any time.
+                Join 2000+ entrepreneurs. No spam, unsubscribe anytime. We respect your privacy.
               </p>
             </div>
           </div>
