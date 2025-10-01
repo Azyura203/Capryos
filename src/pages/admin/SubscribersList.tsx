@@ -16,6 +16,19 @@ const SubscribersList: React.FC = () => {
   useEffect(() => {
     if (user) {
       fetchSubscribers();
+
+      // Set up realtime subscription
+      const subscription = supabase
+        .channel('subscribers-list-changes')
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'subscribers' },
+          () => fetchSubscribers()
+        )
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
     }
   }, [user]);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { BarChart3, Users, FileText, MessageSquare, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { ChartBar as BarChart3, Users, FileText, MessageSquare, Plus, Eye, CreditCard as Edit, Trash2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase, type BlogPost, type Subscriber, type ContentSuggestion } from '../../lib/supabase';
 import toast from 'react-hot-toast';
@@ -21,6 +21,37 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (user) {
       fetchDashboardData();
+
+      // Set up realtime subscriptions
+      const postsSubscription = supabase
+        .channel('posts-changes')
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'blog_posts' },
+          () => fetchDashboardData()
+        )
+        .subscribe();
+
+      const subscribersSubscription = supabase
+        .channel('subscribers-changes')
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'subscribers' },
+          () => fetchDashboardData()
+        )
+        .subscribe();
+
+      const suggestionsSubscription = supabase
+        .channel('suggestions-changes')
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'content_suggestions' },
+          () => fetchDashboardData()
+        )
+        .subscribe();
+
+      return () => {
+        postsSubscription.unsubscribe();
+        subscribersSubscription.unsubscribe();
+        suggestionsSubscription.unsubscribe();
+      };
     }
   }, [user]);
 
@@ -100,7 +131,7 @@ const AdminDashboard: React.FC = () => {
   const statCards = [
     { title: 'Total Posts', value: stats.totalPosts, icon: FileText, color: 'bg-blue-500' },
     { title: 'Subscribers', value: stats.totalSubscribers, icon: Users, color: 'bg-green-500' },
-    { title: 'Total Views', value: stats.totalViews, icon: Eye, color: 'bg-purple-500' },
+    { title: 'Total Views', value: stats.totalViews, icon: Eye, color: 'bg-amber-500' },
     { title: 'Suggestions', value: stats.totalSuggestions, icon: MessageSquare, color: 'bg-orange-500' }
   ];
 
@@ -129,13 +160,13 @@ const AdminDashboard: React.FC = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statCards.map((stat, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white animate-fadeIn">{stat.value}</p>
                 </div>
-                <div className={`p-3 rounded-full ${stat.color}`}>
+                <div className={`p-3 rounded-full ${stat.color} shadow-lg`}>
                   <stat.icon className="h-6 w-6 text-white" />
                 </div>
               </div>
@@ -145,19 +176,22 @@ const AdminDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Posts */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-slideUp">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Posts</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
+                <FileText className="h-5 w-5" />
+                <span>Recent Posts</span>
+              </h2>
               <button
                 onClick={() => window.open('/admin/posts', '_blank')}
-                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium transition-all hover:translate-x-1"
               >
-                View All
+                View All →
               </button>
             </div>
             <div className="space-y-4">
               {recentPosts.map((post) => (
-                <div key={post.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div key={post.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900 dark:text-white truncate">{post.title}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -193,19 +227,22 @@ const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Recent Subscribers */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-slideUp" style={{animationDelay: '0.1s'}}>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Subscribers</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
+                <Users className="h-5 w-5" />
+                <span>Recent Subscribers</span>
+              </h2>
               <button
                 onClick={() => window.open('/admin/subscribers', '_blank')}
-                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium transition-all hover:translate-x-1"
               >
-                View All
+                View All →
               </button>
             </div>
             <div className="space-y-4">
               {recentSubscribers.map((subscriber) => (
-                <div key={subscriber.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div key={subscriber.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">{subscriber.name || 'Anonymous'}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{subscriber.email}</p>
@@ -227,33 +264,22 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Recent Suggestions */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-slideUp" style={{animationDelay: '0.2s'}}>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Content Suggestions</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
+              <MessageSquare className="h-5 w-5" />
+              <span>Recent Content Suggestions</span>
+            </h2>
             <button
               onClick={() => window.open('/admin/suggestions', '_blank')}
-              className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+              className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium transition-all hover:translate-x-1"
             >
-              View All
-            </button>
-            <button
-              onClick={() => window.open('/admin/subscribers', '_blank')}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
-            >
-              <Users className="h-4 w-4" />
-              <span>Subscribers</span>
-            </button>
-            <button
-              onClick={() => window.open('/admin/suggestions', '_blank')}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors duration-200 flex items-center space-x-2"
-            >
-              <MessageSquare className="h-4 w-4" />
-              <span>Suggestions</span>
+              View All →
             </button>
           </div>
           <div className="space-y-4">
             {recentSuggestions.map((suggestion) => (
-              <div key={suggestion.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div key={suggestion.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-all duration-200 hover:scale-[1.01]">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900 dark:text-white">{suggestion.subject}</h3>

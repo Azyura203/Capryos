@@ -39,7 +39,7 @@ const PostEditor: React.FC = () => {
         .from('blog_posts')
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       setPost(data);
@@ -115,10 +115,22 @@ const PostEditor: React.FC = () => {
         updated_at: new Date().toISOString()
       };
 
-      if (id === 'new') {
+      if (id === 'new' || !id) {
+        // Create new post
         const { data, error } = await supabase
           .from('blog_posts')
-          .insert([postData])
+          .insert([{
+            title: postData.title,
+            slug: postData.slug,
+            excerpt: postData.excerpt || '',
+            content: postData.content,
+            thumbnail_url: postData.thumbnail_url || null,
+            tags: postData.tags || [],
+            status,
+            author: postData.author || 'Admin',
+            read_time: postData.read_time || 5,
+            published_at: status === 'published' ? new Date().toISOString() : null
+          }])
           .select()
           .single();
 
@@ -126,13 +138,26 @@ const PostEditor: React.FC = () => {
         toast.success(`Post ${status === 'published' ? 'published' : 'saved'} successfully!`);
         navigate(`/admin/posts/edit/${data.id}`);
       } else {
+        // Update existing post
         const { error } = await supabase
           .from('blog_posts')
-          .update(postData)
+          .update({
+            title: postData.title,
+            slug: postData.slug,
+            excerpt: postData.excerpt || '',
+            content: postData.content,
+            thumbnail_url: postData.thumbnail_url || null,
+            tags: postData.tags || [],
+            status,
+            author: postData.author || 'Admin',
+            read_time: postData.read_time || 5,
+            published_at: status === 'published' ? (post.published_at || new Date().toISOString()) : null
+          })
           .eq('id', id);
 
         if (error) throw error;
         toast.success(`Post ${status === 'published' ? 'published' : 'updated'} successfully!`);
+        fetchPost();
       }
     } catch (error) {
       console.error('Error saving post:', error);
@@ -196,19 +221,19 @@ const PostEditor: React.FC = () => {
               )}
               <button
                 onClick={() => savePost('draft')}
-                disabled={saving}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
+                disabled={saving || !post.title || !post.content}
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="h-4 w-4" />
-                <span>Save Draft</span>
+                <span>{saving ? 'Saving...' : 'Save Draft'}</span>
               </button>
               <button
                 onClick={() => savePost('published')}
-                disabled={saving}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
+                disabled={saving || !post.title || !post.content}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Upload className="h-4 w-4" />
-                <span>Publish</span>
+                <span>{saving ? 'Publishing...' : 'Publish'}</span>
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { MessageSquare, Search, Filter, Calendar, Mail, User, CheckCircle, Clock, Lightbulb } from 'lucide-react';
+import { MessageSquare, Search, ListFilter as Filter, Calendar, Mail, User, CircleCheck as CheckCircle, Clock, Lightbulb } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase, type ContentSuggestion } from '../../lib/supabase';
@@ -16,6 +16,19 @@ const ContentSuggestionsList: React.FC = () => {
   useEffect(() => {
     if (user) {
       fetchSuggestions();
+
+      // Set up realtime subscription
+      const subscription = supabase
+        .channel('suggestions-list-changes')
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'content_suggestions' },
+          () => fetchSuggestions()
+        )
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
     }
   }, [user]);
 
