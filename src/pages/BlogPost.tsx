@@ -282,40 +282,42 @@ const BlogPostPage: React.FC = () => {
 
         {/* Content */}
         <div className="prose prose-lg dark:prose-invert max-w-none animate-fadeIn" style={{ animationDelay: '200ms' }}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              code({ node, inline, className, children, ...props }) {
-                const match = /language-(\w+)/.exec(className || '');
-                return !inline && match ? (
-                  <div className="my-6 rounded-lg overflow-hidden shadow-md ring-1 ring-gray-200 dark:ring-gray-700">
-                    <SyntaxHighlighter
-                      style={tomorrow}
-                      language={match[1]}
-                      PreTag="div"
-                      customStyle={{
-                        margin: 0,
-                        borderRadius: 0,
-                        padding: '1.25rem',
-                        fontSize: '0.875rem',
-                        lineHeight: '1.6',
-                      }}
-                      {...props}
-                    >
-                      {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
-                  </div>
-                ) : (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                );
-              },
-            }}
-          >
-            {post.content}
-          </ReactMarkdown>
+          <div className="bg-white dark:bg-gray-800/30 rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-gray-700/50">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                code({ node, inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <div className="my-6 rounded-xl overflow-hidden shadow-lg ring-1 ring-gray-200 dark:ring-gray-700">
+                      <SyntaxHighlighter
+                        style={tomorrow}
+                        language={match[1]}
+                        PreTag="div"
+                        customStyle={{
+                          margin: 0,
+                          borderRadius: 0,
+                          padding: '1.5rem',
+                          fontSize: '0.875rem',
+                          lineHeight: '1.7',
+                        }}
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    </div>
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
         </div>
 
         {/* Newsletter CTA */}
