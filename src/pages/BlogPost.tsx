@@ -109,9 +109,10 @@ const BlogPostPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="py-20">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 dark:border-gray-700 dark:border-t-blue-500 mx-auto"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading article...</p>
         </div>
       </div>
     );
@@ -119,26 +120,27 @@ const BlogPostPage: React.FC = () => {
 
   if (error || !post) {
     return (
-      <div className="py-20">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              {error === 'Post not found' ? '404 - Post Not Found' : 'Error Loading Post'}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300">
-              {error === 'Post not found' 
-                ? 'The post you\'re looking for doesn\'t exist or has been removed.'
-                : 'Something went wrong while loading the post.'
-              }
-            </p>
-            <Link
-              to="/blog"
-              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Back to Blog</span>
-            </Link>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center space-y-6 max-w-md px-6">
+          <div className="text-6xl font-bold text-gray-300 dark:text-gray-700">
+            {error === 'Post not found' ? '404' : '⚠'}
           </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {error === 'Post not found' ? 'Post Not Found' : 'Error Loading Post'}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {error === 'Post not found'
+              ? 'The post you\'re looking for doesn\'t exist or has been removed.'
+              : 'Something went wrong while loading the post.'
+            }
+          </p>
+          <Link
+            to="/blog"
+            className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Blog</span>
+          </Link>
         </div>
       </div>
     );
@@ -147,7 +149,7 @@ const BlogPostPage: React.FC = () => {
   const formattedDate = format(new Date(post.published_at || post.created_at), 'MMMM dd, yyyy');
 
   return (
-    <div className="py-20">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <SEOHead
         title={post.title}
         description={post.excerpt}
@@ -159,157 +161,190 @@ const BlogPostPage: React.FC = () => {
         modifiedTime={post.updated_at}
       />
 
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-8 animate-fadeIn">
           <Link
             to="/blog"
-            className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            className="group inline-flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform duration-200" />
             <span>Back to Blog</span>
           </Link>
         </div>
 
         {/* Header */}
-        <header className="mb-12">
-          <div className="space-y-6">
+        <header className="mb-12 animate-slideUp">
+          <div className="space-y-8">
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag, index) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center space-x-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="inline-flex items-center space-x-1.5 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/30 text-blue-700 dark:text-blue-300 px-4 py-1.5 rounded-full text-sm font-semibold border border-blue-200 dark:border-blue-700/50 hover:shadow-md transform hover:scale-105 transition-all duration-200 animate-fadeIn"
                 >
-                  <Tag className="h-3 w-3" />
+                  <Tag className="h-3.5 w-3.5" />
                   <span>{tag}</span>
                 </span>
               ))}
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white tracking-tight">
               {post.title}
             </h1>
 
             {/* Excerpt */}
-            <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+            <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed font-light">
               {post.excerpt}
             </p>
 
             {/* Meta */}
-            <div className="flex flex-wrap items-center justify-between gap-4 py-6 border-t border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                    {post.author.charAt(0).toUpperCase()}
+            <div className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div className="flex flex-wrap items-center gap-6 text-sm">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-base shadow-md">
+                      {post.author.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-900 dark:text-white">{post.author}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Author</span>
+                    </div>
                   </div>
-                  <span className="font-medium">{post.author}</span>
+                  <div className="h-8 w-px bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                    <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <span className="font-medium">{formattedDate}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                    <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <span className="font-medium">{post.read_time} min read</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                    <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <span className="font-medium">{post.views + 1} views</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formattedDate}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{post.read_time} min read</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Eye className="h-4 w-4" />
-                  <span>{post.views + 1} views</span>
-                </div>
-              </div>
 
-              {/* Share Buttons */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">Share:</span>
-                <button
-                  onClick={() => sharePost('twitter')}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                  aria-label="Share on Twitter"
-                >
-                  <Twitter className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => sharePost('linkedin')}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                  aria-label="Share on LinkedIn"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => sharePost('facebook')}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                  aria-label="Share on Facebook"
-                >
-                  <Facebook className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => sharePost('copy')}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                  aria-label="Copy link"
-                >
-                  <Share2 className="h-4 w-4" />
-                </button>
+                {/* Share Buttons */}
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Share:</span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => sharePost('twitter')}
+                      className="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-200 dark:hover:border-blue-700/50 transition-all duration-200 transform hover:scale-110 hover:shadow-md"
+                      aria-label="Share on Twitter"
+                    >
+                      <Twitter className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => sharePost('linkedin')}
+                      className="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-200 dark:hover:border-blue-700/50 transition-all duration-200 transform hover:scale-110 hover:shadow-md"
+                      aria-label="Share on LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => sharePost('facebook')}
+                      className="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-200 dark:hover:border-blue-700/50 transition-all duration-200 transform hover:scale-110 hover:shadow-md"
+                      aria-label="Share on Facebook"
+                    >
+                      <Facebook className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => sharePost('copy')}
+                      className="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-200 dark:hover:border-blue-700/50 transition-all duration-200 transform hover:scale-110 hover:shadow-md"
+                      aria-label="Copy link"
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Featured Image */}
           {post.thumbnail_url && (
-            <div className="mt-8 aspect-video rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={post.thumbnail_url}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
+            <div className="mt-10 group">
+              <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200 dark:ring-gray-700 transform transition-all duration-500 hover:shadow-3xl hover:scale-[1.02]">
+                <img
+                  src={post.thumbnail_url}
+                  alt={post.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
             </div>
           )}
         </header>
 
         {/* Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              code({ node, inline, className, children, ...props }) {
-                const match = /language-(\w+)/.exec(className || '');
-                return !inline && match ? (
-                  <SyntaxHighlighter
-                    style={tomorrow}
-                    language={match[1]}
-                    PreTag="div"
-                    {...props}
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                );
-              },
-            }}
-          >
-            {post.content}
-          </ReactMarkdown>
+        <div className="prose prose-lg dark:prose-invert max-w-none animate-fadeIn" style={{ animationDelay: '200ms' }}>
+          <div className="bg-white dark:bg-gray-800/30 rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-gray-700/50">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                code({ node, inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <div className="my-6 rounded-xl overflow-hidden shadow-lg ring-1 ring-gray-200 dark:ring-gray-700">
+                      <SyntaxHighlighter
+                        style={tomorrow}
+                        language={match[1]}
+                        PreTag="div"
+                        customStyle={{
+                          margin: 0,
+                          borderRadius: 0,
+                          padding: '1.5rem',
+                          fontSize: '0.875rem',
+                          lineHeight: '1.7',
+                        }}
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    </div>
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
         </div>
 
         {/* Newsletter CTA */}
-        <div className="mt-16">
-          <NewsletterSignup />
+        <div className="mt-20 animate-slideUp" style={{ animationDelay: '400ms' }}>
+          <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-800 dark:via-gray-800/50 dark:to-blue-900/20 rounded-3xl p-8 sm:p-12 border border-blue-100 dark:border-blue-900/30 shadow-lg">
+            <NewsletterSignup />
+          </div>
         </div>
       </article>
 
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <section className="mt-20 bg-gray-50 dark:bg-gray-800 py-16">
+        <section className="mt-20 bg-gradient-to-b from-gray-100 via-gray-50 to-white dark:from-gray-800 dark:via-gray-800/50 dark:to-gray-900 py-20 border-t border-gray-200 dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12">Related Articles</h2>
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Related Articles</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Continue exploring more insights and stories</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedPosts.map((relatedPost) => (
-                <BlogCard key={relatedPost.id} post={relatedPost} />
+              {relatedPosts.map((relatedPost, index) => (
+                <div
+                  key={relatedPost.id}
+                  className="animate-slideUp"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <BlogCard post={relatedPost} />
+                </div>
               ))}
             </div>
           </div>
