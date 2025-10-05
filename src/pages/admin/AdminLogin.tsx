@@ -9,7 +9,8 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { user, signIn } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { user, signIn, signUp } = useAuth();
 
   // Redirect if already logged in
   if (user) {
@@ -21,12 +22,23 @@ const AdminLogin: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await signIn(email, password);
-      
-      if (error) {
-        toast.error(error.message);
+      if (isSignUp) {
+        const { error } = await signUp(email, password);
+
+        if (error) {
+          toast.error(error.message);
+        } else {
+          toast.success('Account created successfully! You can now sign in.');
+          setIsSignUp(false);
+        }
       } else {
-        toast.success('Welcome back!');
+        const { error } = await signIn(email, password);
+
+        if (error) {
+          toast.error(error.message);
+        } else {
+          toast.success('Welcome back!');
+        }
       }
     } catch (error) {
       toast.error('An unexpected error occurred');
@@ -43,10 +55,10 @@ const AdminLogin: React.FC = () => {
             <Lock className="h-8 w-8 text-white" />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
-            Admin Login
+            {isSignUp ? 'Create Admin Account' : 'Admin Login'}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Sign in to access the Capryos admin panel
+            {isSignUp ? 'Set up your admin account' : 'Sign in to access the Capryos admin panel'}
           </p>
         </div>
 
@@ -109,17 +121,21 @@ const AdminLogin: React.FC = () => {
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Sign In'
+                isSignUp ? 'Create Account' : 'Sign In'
               )}
             </button>
           </div>
 
           <div className="text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have admin access?{' '}
-              <a href="/contact" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">
-                Contact us
-              </a>
+              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+              <button
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {isSignUp ? 'Sign in' : 'Create account'}
+              </button>
             </p>
           </div>
         </form>
