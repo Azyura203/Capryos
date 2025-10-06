@@ -88,7 +88,7 @@ const PostEditor: React.FC = () => {
 
   const calculateReadTime = (content: string) => {
     const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
+    const wordCount = content.split(/\s+/).filter(Boolean).length;
     return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   };
 
@@ -169,8 +169,8 @@ const PostEditor: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-900 to-black">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
       </div>
     );
   }
@@ -181,61 +181,60 @@ const PostEditor: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-black text-gray-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/admin')}
-                className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow duration-200"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {id === 'new' ? 'Create New Post' : 'Edit Post'}
-                </h1>
-                <p className="text-gray-600 dark:text-gray-300">
-                  {id === 'new' ? 'Write and publish your blog post' : 'Update your blog post'}
-                </p>
-              </div>
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/admin')}
+              className="p-2 rounded-lg bg-white/6 backdrop-blur-sm border border-white/6 text-sm hover:scale-[1.02] transition"
+              aria-label="Back to dashboard"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight"> {id === 'new' ? 'Create New Post' : 'Edit Post'} </h1>
+              <p className="text-sm text-gray-300/80">Craft beautiful posts with the premium editor</p>
             </div>
-            <div className="flex space-x-4">
-              {post.slug && (
-                <button
-                  onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2"
-                >
-                  <Eye className="h-4 w-4" />
-                  <span>Preview</span>
-                </button>
-              )}
+          </div>
+
+          <div className="flex items-center gap-3">
+            {post.slug && (
               <button
-                onClick={() => savePost('draft')}
-                disabled={saving || !post.title || !post.content}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
+                className="px-3 py-2 rounded-lg bg-white/6 backdrop-blur-sm border border-white/6 text-sm hover:brightness-95 transition"
               >
-                <Save className="h-4 w-4" />
-                <span>{saving ? 'Saving...' : 'Save Draft'}</span>
+                <Eye className="h-4 w-4 inline-block mr-2" />
+                Preview
               </button>
-              <button
-                onClick={() => savePost('published')}
-                disabled={saving || !post.title || !post.content}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Upload className="h-4 w-4" />
-                <span>{saving ? 'Publishing...' : 'Publish'}</span>
-              </button>
-            </div>
+            )}
+
+            <button
+              onClick={() => savePost('draft')}
+              disabled={saving || !post.title || !post.content}
+              className="px-4 py-2 rounded-lg bg-white/6 backdrop-blur-sm border border-white/6 text-sm hover:brightness-95 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <Save className="h-4 w-4" />
+              <span>{saving ? 'Saving...' : 'Save Draft'}</span>
+            </button>
+
+            <button
+              onClick={() => savePost('published')}
+              disabled={saving || !post.title || !post.content}
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-amber-600 text-black font-medium shadow-lg hover:brightness-95 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <Upload className="h-4 w-4" />
+              <span>{saving ? 'Publishing...' : 'Publish'}</span>
+            </button>
           </div>
         </div>
 
@@ -243,71 +242,61 @@ const PostEditor: React.FC = () => {
           {/* Main Editor */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Title
-              </label>
+            <div className="rounded-2xl p-6 bg-white/4 backdrop-blur-md border border-white/6 shadow-2xl">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
               <input
                 type="text"
                 value={post.title}
                 onChange={(e) => handleTitleChange(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-xl font-semibold"
+                className="w-full px-4 py-3 rounded-xl border border-white/8 bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-colors duration-200 text-xl font-semibold"
                 placeholder="Enter post title..."
               />
               {post.slug && (
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  URL: /blog/{post.slug}
+                <p className="mt-2 text-sm text-gray-300/70">
+                  URL: <span className="text-yellow-300">/blog/{post.slug}</span>
                 </p>
               )}
             </div>
 
             {/* Excerpt */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Excerpt
-              </label>
+            <div className="rounded-2xl p-6 bg-white/4 backdrop-blur-md border border-white/6 shadow-2xl">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Excerpt</label>
               <textarea
                 value={post.excerpt}
                 onChange={(e) => setPost(prev => ({ ...prev, excerpt: e.target.value }))}
                 rows={3}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-white/8 bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-colors duration-200 resize-none"
                 placeholder="Brief description of your post..."
               />
             </div>
 
             {/* Content */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Content (Markdown)
-              </label>
+            <div className="rounded-2xl p-6 bg-white/4 backdrop-blur-md border border-white/6 shadow-2xl">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Content (Markdown)</label>
               <textarea
                 value={post.content}
                 onChange={(e) => handleContentChange(e.target.value)}
-                rows={20}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none font-mono text-sm"
+                rows={18}
+                className="w-full px-4 py-3 rounded-xl border border-white/8 bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-colors duration-200 resize-none font-mono text-sm"
                 placeholder="Write your post content in Markdown..."
               />
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Estimated read time: {post.read_time} minutes
-              </p>
+              <p className="mt-2 text-sm text-gray-300/70">Estimated read time: <span className="text-yellow-300">{post.read_time}</span> minutes</p>
             </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Post Settings */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Post Settings</h3>
+            <div className="rounded-2xl p-6 bg-white/4 backdrop-blur-md border border-white/6 shadow-2xl">
+              <h3 className="text-lg font-medium text-gray-100 mb-4">Post Settings</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Status
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
                   <select
                     value={post.status}
                     onChange={(e) => setPost(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-white/8 bg-transparent text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
@@ -315,36 +304,30 @@ const PostEditor: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Author
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Author</label>
                   <input
                     type="text"
                     value={post.author}
                     onChange={(e) => setPost(prev => ({ ...prev, author: e.target.value }))}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-white/8 bg-transparent text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Thumbnail URL
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Thumbnail URL</label>
                   <input
                     type="url"
                     value={post.thumbnail_url}
                     onChange={(e) => setPost(prev => ({ ...prev, thumbnail_url: e.target.value }))}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-white/8 bg-transparent text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                     placeholder="https://example.com/image.jpg"
                   />
                   {post.thumbnail_url && (
                     <img
                       src={post.thumbnail_url}
                       alt="Thumbnail preview"
-                      className="mt-2 w-full h-32 object-cover rounded-lg"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
+                      className="mt-2 w-full h-36 object-cover rounded-lg border border-white/6"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                   )}
                 </div>
@@ -352,8 +335,8 @@ const PostEditor: React.FC = () => {
             </div>
 
             {/* Tags */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tags</h3>
+            <div className="rounded-2xl p-6 bg-white/4 backdrop-blur-md border border-white/6 shadow-2xl">
+              <h3 className="text-lg font-medium text-gray-100 mb-4">Tags</h3>
               
               <div className="space-y-4">
                 <div className="flex space-x-2">
@@ -361,13 +344,13 @@ const PostEditor: React.FC = () => {
                     type="text"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addTag()}
-                    className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    className="flex-1 px-3 py-2 rounded-lg border border-white/8 bg-transparent text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                     placeholder="Add tag..."
                   />
                   <button
                     onClick={addTag}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-amber-600 text-black font-medium shadow hover:brightness-95 transition"
                   >
                     Add
                   </button>
@@ -377,12 +360,13 @@ const PostEditor: React.FC = () => {
                   {post.tags?.map((tag, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center space-x-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium"
+                      className="inline-flex items-center gap-2 bg-white/6 border border-white/6 text-gray-100 px-3 py-1 rounded-full text-sm font-medium"
                     >
-                      <span>{tag}</span>
+                      <span className="truncate max-w-xs">{tag}</span>
                       <button
                         onClick={() => removeTag(tag)}
-                        className="hover:text-blue-600 dark:hover:text-blue-300"
+                        className="p-1 hover:text-yellow-300"
+                        aria-label={`Remove ${tag}`}
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -391,6 +375,7 @@ const PostEditor: React.FC = () => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

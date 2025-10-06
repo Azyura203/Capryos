@@ -1,119 +1,191 @@
 import React from 'react';
-import { User, Lightbulb, Globe, Target } from 'lucide-react';
+import {
+  User,
+  Lightbulb,
+  Globe,
+  Target,
+  Users,
+  Sparkles,
+  Heart,
+  Mail
+} from 'lucide-react';
 
 const About: React.FC = () => {
   return (
-    <div className="py-20">
-      {/* Hero Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 mb-20">
-        <div className="space-y-4">
-          <h1 className="text-4xl sm:text-5xl font-bold">About Capryos</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-            The story behind our mission to simplify the complex world of crypto and business.
-          </p>
-        </div>
-      </section>
-
-      {/* Kane's Story */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div className="py-20 bg-gray-50 dark:bg-gray-900">
+      {/* Hero */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 mb-6">
-              <User className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-              <h2 className="text-3xl font-bold">Meet Kane</h2>
+            <div className="inline-flex items-center gap-3">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-xl">
+                <Sparkles className="h-7 w-7 text-white" />
+              </div>
+              <span className="text-sm font-medium tracking-wide text-indigo-600 dark:text-indigo-400">Who we are</span>
             </div>
-            <div className="space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
-              <p>
-                Kane started Capryos from a simple observation: the most powerful financial and technological 
-                innovations of our time were being explained in ways that only experts could understand.
-              </p>
-              <p>
-                After years of navigating the crypto space and building successful businesses, Kane realized 
-                that the barrier to entry wasn't intelligence or capability—it was clarity. Too many brilliant 
-                ideas were locked behind jargon and complexity.
-              </p>
-              <p>
-                Today, Kane leads Capryos with a clear vision: make the future accessible to everyone. Through 
-                practical insights, real-world examples, and a community-first approach, Capryos bridges the 
-                gap between innovation and implementation.
-              </p>
+
+            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">About Capryos</h1>
+
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
+              We simplify the complex world of crypto and business — turning technical ideas into practical, actionable insight for builders and curious minds.
+            </p>
+
+            <div className="flex flex-wrap gap-3 mt-4">
+              <a
+                href="/blog"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg hover:scale-[1.02] transition"
+              >
+                Explore Articles
+              </a>
+              <a
+                href="/contact"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/6 backdrop-blur-sm border border-white/6 text-sm text-gray-900 dark:text-white hover:brightness-95 transition"
+              >
+                Contact Kane
+              </a>
             </div>
           </div>
+
           <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-2xl flex items-center justify-center">
-              <User className="h-32 w-32 text-blue-600 dark:text-blue-400 opacity-60" />
+            <div className="rounded-2xl overflow-hidden shadow-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-md border border-white/8">
+              <img
+                src="/capryos-hero.jpg"
+                alt="Capryos"
+                className="w-full h-72 object-cover"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+              <div className="p-6">
+                <h3 className="text-xl font-semibold">Our Approach</h3>
+                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                  Clear explanations, practical examples, and real tools to help you build and invest with confidence.
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/8 text-sm font-medium">
+                    <Users className="h-4 w-4" /> Community-first
+                  </div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/8 text-sm font-medium">
+                    <Heart className="h-4 w-4" /> Practical
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
-              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">Founder & CEO</p>
+
+            <div className="absolute -bottom-8 -right-9 w-32 h-32 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-500 flex items-center justify-center shadow-2xl ring-1 ring-white/10">
+              <User className="h-8 w-8 text-white" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <section className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          <Target className="h-16 w-16 text-blue-600 dark:text-blue-400 mx-auto" />
-          <h2 className="text-3xl sm:text-4xl font-bold">Our Mission</h2>
-          <blockquote className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed italic">
-            "At Capryos, we believe that the future belongs to those who understand both technology and business. 
-            Our mission is to simplify crypto, entrepreneurship, and financial knowledge, turning complex ideas 
-            into practical insights anyone can use. Whether you're an aspiring founder, a curious investor, 
-            or just exploring the digital economy, Capryos is your guide to learning, building, and growing smarter."
-          </blockquote>
+      {/* Founder & Story */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="rounded-2xl p-8 bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start gap-6">
+                <div className="w-28 h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-tr from-indigo-600 to-pink-500 flex items-center justify-center text-white text-3xl font-bold">
+                  K
+                </div>
+                <div>
+                  <h2 className="text-2xl font-semibold">Meet Kane</h2>
+                  <p className="mt-2 text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Kane founded Capryos to make technology and business accessible. After years building and navigating crypto and startups, Kane focuses on clarity — turning complex subjects into usable knowledge.
+                  </p>
+                  <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                    Founder • Writer • Builder
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white/60 border border-white/8">
+                  <div className="text-sm text-gray-500">Experience</div>
+                  <div className="mt-2 text-xl font-semibold">10+ yrs</div>
+                </div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white/60 border border-white/8">
+                  <div className="text-sm text-gray-500">Projects</div>
+                  <div className="mt-2 text-xl font-semibold">50+</div>
+                </div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white/60 border border-white/8">
+                  <div className="text-sm text-gray-500">Community</div>
+                  <div className="mt-2 text-xl font-semibold">Active</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl p-6 bg-white/6 backdrop-blur-md border border-white/6 shadow-lg">
+              <h3 className="text-lg font-semibold">Why we started</h3>
+              <p className="mt-3 text-gray-700 dark:text-gray-300">
+                Too many valuable ideas were lost in jargon. Capryos is about translating innovation into practical steps — for founders, builders, and curious learners.
+              </p>
+            </div>
+          </div>
+
+          <aside className="space-y-6">
+            <div className="rounded-2xl p-6 bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <h4 className="text-sm text-gray-500 uppercase tracking-wide">Get in touch</h4>
+              <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Have a project or question? Say hello.</p>
+              <a href="/contact" className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-amber-600 text-black font-medium shadow-lg">
+                <Mail className="h-4 w-4" /> Contact
+              </a>
+            </div>
+
+            <div className="rounded-2xl p-6 bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <h4 className="text-sm text-gray-500 uppercase tracking-wide">Quick facts</h4>
+              <ul className="mt-3 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex items-center gap-3"><Lightbulb className="h-4 w-4 text-yellow-500" />Simple explanations</li>
+                <li className="flex items-center gap-3"><Globe className="h-4 w-4 text-green-500" />Accessible globally</li>
+                <li className="flex items-center gap-3"><Target className="h-4 w-4 text-blue-500" />Practical outcomes</li>
+              </ul>
+            </div>
+          </aside>
         </div>
       </section>
 
       {/* Values */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold">Our Values</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              The principles that guide everything we do at Capryos.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <Lightbulb className="h-12 w-12 text-yellow-500 mx-auto" />
-              <h3 className="text-xl font-semibold">Simplicity</h3>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                We believe complex ideas should be explained simply, without losing their power or precision.
-              </p>
+      <section className="py-16 bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-900/80">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-6">Our Values</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <Lightbulb className="h-8 w-8 text-yellow-500 mx-auto" />
+              <h3 className="mt-4 text-lg font-semibold">Simplicity</h3>
+              <p className="mt-2 text-gray-700 dark:text-gray-300">We make complex topics easy to act on without losing nuance.</p>
             </div>
-            <div className="text-center space-y-4">
-              <Globe className="h-12 w-12 text-green-500 mx-auto" />
-              <h3 className="text-xl font-semibold">Accessibility</h3>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Knowledge should be available to everyone, regardless of background or experience level.
-              </p>
+
+            <div className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <Globe className="h-8 w-8 text-green-500 mx-auto" />
+              <h3 className="mt-4 text-lg font-semibold">Accessibility</h3>
+              <p className="mt-2 text-gray-700 dark:text-gray-300">Learning should be for everyone — no gatekeeping.</p>
             </div>
-            <div className="text-center space-y-4">
-              <Target className="h-12 w-12 text-blue-500 mx-auto" />
-              <h3 className="text-xl font-semibold">Practicality</h3>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Every insight we share is actionable and designed to create real-world impact.
-              </p>
+
+            <div className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg border border-gray-100 dark:border-gray-700">
+              <Target className="h-8 w-8 text-blue-500 mx-auto" />
+              <h3 className="mt-4 text-lg font-semibold">Practicality</h3>
+              <p className="mt-2 text-gray-700 dark:text-gray-300">Actionable insights that lead to real-world results.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Future Vision */}
-      <section className="bg-white dark:bg-gray-900 py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          <h2 className="text-3xl sm:text-4xl font-bold">Looking Ahead</h2>
-          <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
-            <p>
-              We're building more than just a content platform. Capryos is evolving into a comprehensive 
-              ecosystem for crypto and business education, featuring interactive courses, community-driven 
-              projects, and tools that help you implement what you learn.
-            </p>
-            <p>
-              Join us as we continue to democratize access to the knowledge that will shape the next decade 
-              of technology and business innovation.
-            </p>
+      {/* CTA */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="rounded-2xl p-10 bg-gradient-to-br from-indigo-700 to-blue-600 text-white shadow-2xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h3 className="text-2xl font-semibold">Join our newsletter</h3>
+              <p className="mt-2 text-sm text-indigo-100/90">Practical updates on crypto, business, and curated resources delivered weekly.</p>
+            </div>
+
+            <form className="flex gap-3 mt-4 md:mt-0" onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="px-4 py-3 rounded-lg outline-none text-gray-900"
+              />
+              <button className="px-5 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:brightness-95 transition">Subscribe</button>
+            </form>
           </div>
         </div>
       </section>
